@@ -115,7 +115,7 @@ abstract class _HomeStore with Store {
   }
 
   void playAudio() {
-    if (lastPositionPlayer >= 0 && lastPositionPlayer < musicModels.length) {
+    if (lastPositionPlayer >= 0 && lastPositionPlayer < musicModels.length && loading == false) {
       audioPlayer.play(musicModels[lastPositionPlayer].previewUrl.toString());
     }
   }

@@ -49,9 +49,13 @@ class _SearchWidgetState extends State<SearchWidget> {
               ),
             ),
             if (widget.loading)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CupertinoActivityIndicator(),
+              Container(
+                height: 24,
+                width: 24,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CupertinoActivityIndicator(),
+                ),
               ),
           ],
         ),

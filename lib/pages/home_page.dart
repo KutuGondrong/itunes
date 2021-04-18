@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:itunes/constants/colors.dart';
@@ -24,31 +25,44 @@ class _HomePageState extends State<HomePage> {
           var _homeStore = context.watch<HomeStore>();
           return Scaffold(
             backgroundColor: primaryColor,
-            body: SafeArea(
-              child: Column(
-                children: [
-                  SearchWidget(
-                    loading: _homeStore.loading,
-                    onTextChange: (text) {
-                      _homeStore.searchMusicByArtist(text);
-                    },
-                  ),
-                  Expanded(
-                      child: ListView.builder(
-                        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                        itemCount: context.watch<HomeStore>().musicModels.length,
-                        itemBuilder: (context, index) => ItemSongWidget(
-                          homeStore: _homeStore,
-                          position: index,
+            body: Column(
+              children: [
+                Expanded(
+                  child: SafeArea(
+                    child: Column(
+                      children: [
+                        SearchWidget(
+                          loading: _homeStore.loading,
+                          onTextChange: (text) {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            _homeStore.searchMusicByArtist(text);
+                          },
                         ),
-                      )
+                        Expanded(
+                            child: _homeStore.musicModels.length > 0 ? ListView.builder(
+                              physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                              itemCount: _homeStore.musicModels.length,
+                              itemBuilder: (context, index) => ItemSongWidget(
+                                homeStore: _homeStore,
+                                position: index,
+                              ),
+                            ) : _homeStore.musicModels.length == 0 && _homeStore.loading == true ?
+                            Center(
+                              child: CupertinoActivityIndicator(),
+                            ) :
+                            Center(
+                              child: Text('Hmmmm.... Sorry ... We couldn\'t find what you wanted', ),
+                            )
+                        ),
+                      ],
+                    ),
                   ),
-                  if (_homeStore.loading == false)
+                ),
+                if (_homeStore.loading == false && _homeStore.musicModels.length > 0)
                   PlayerWidget(
                     homeStore: _homeStore,
                   ),
-                ],
-              ),
+              ],
             )
           );
         }),
